@@ -13,6 +13,7 @@ import com.jsh.erp.service.unit.UnitService;
 import com.jsh.erp.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -88,6 +89,7 @@ public class MaterialController {
         } else {
             objectMap.put("status", false);
         }
+        HashMap<Integer,Integer> map = new HashMap<>();
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
 

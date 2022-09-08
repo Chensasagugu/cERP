@@ -45,6 +45,7 @@ public class BusinessConstants {
      * */
     public static final String PAY_TYPE_PREPAID = "预付款";
     public static final String PAY_TYPE_BY_CASH = "现付";
+    public static final String PAY_TYPE_BOOKKEEPING = "记账";
     /**
      * 删除标记 deleteFlag  '0'未删除 '1'已删除
      * */
@@ -200,4 +201,9 @@ public class BusinessConstants {
      * */
     //session的生命周期,秒
     public static final Long MAX_SESSION_IN_SECONDS=60*60*24L;
+
+    /**
+     * 订单备注
+     */
+    public static final String DUSTO_REMARK = "大东发来的订单";
 }

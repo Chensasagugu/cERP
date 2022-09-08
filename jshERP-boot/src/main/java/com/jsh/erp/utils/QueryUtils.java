@@ -34,9 +34,9 @@ public class QueryUtils {
     public static <T> T list2One(List<T> list, String label, T defaultValue) {
         Assert.notNull(list);
         Assert.notNull(label);
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return defaultValue;
-        else {
+        } else {
             Assert.isTrue(list.size() == 1, label + "对应的记录不止一个");
             return list.get(0);
         }
@@ -66,8 +66,9 @@ public class QueryUtils {
 
     public static int currentPage(Map<String, String> map) {
         int val = Integer.parseInt(map.get(CURRENT_PAGE));
-        if (val < 1)
+        if (val < 1) {
             throw new RuntimeException("当前页数目:" + val + " 必须大于0");
+        }
         return val;
     }
 

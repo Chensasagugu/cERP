@@ -36,7 +36,7 @@ public class ResourceController {
                           HttpServletRequest request) throws Exception {
         Object obj = configResourceManager.selectOne(apiName, id);
         Map<String, Object> objectMap = new HashMap<String, Object>();
-        if(obj != null) {
+        if (obj != null) {
             objectMap.put("info", obj);
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
         } else {
@@ -47,10 +47,10 @@ public class ResourceController {
     @GetMapping(value = "/{apiName}/list")
     @ApiOperation(value = "获取信息列表")
     public String getList(@PathVariable("apiName") String apiName,
-                        @RequestParam(value = Constants.PAGE_SIZE, required = false) Integer pageSize,
-                        @RequestParam(value = Constants.CURRENT_PAGE, required = false) Integer currentPage,
-                        @RequestParam(value = Constants.SEARCH, required = false) String search,
-                        HttpServletRequest request)throws Exception {
+                          @RequestParam(value = Constants.PAGE_SIZE, required = false) Integer pageSize,
+                          @RequestParam(value = Constants.CURRENT_PAGE, required = false) Integer currentPage,
+                          @RequestParam(value = Constants.SEARCH, required = false) String search,
+                          HttpServletRequest request) throws Exception {
         Map<String, String> parameterMap = ParamUtils.requestToMap(request);
         parameterMap.put(Constants.SEARCH, search);
         Map<String, Object> objectMap = new HashMap<String, Object>();
@@ -76,12 +76,12 @@ public class ResourceController {
     @PostMapping(value = "/{apiName}/add", produces = {"application/javascript", "application/json"})
     @ApiOperation(value = "新增")
     public String addResource(@PathVariable("apiName") String apiName,
-                              @RequestBody JSONObject obj, HttpServletRequest request)throws Exception {
+                              @RequestBody JSONObject obj, HttpServletRequest request) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int insert = configResourceManager.insert(apiName, obj, request);
-        if(insert > 0) {
+        if (insert > 0) {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
-        } else if(insert == -1) {
+        } else if (insert == -1) {
             return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
         } else {
             return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
@@ -91,12 +91,12 @@ public class ResourceController {
     @PutMapping(value = "/{apiName}/update", produces = {"application/javascript", "application/json"})
     @ApiOperation(value = "修改")
     public String updateResource(@PathVariable("apiName") String apiName,
-                                 @RequestBody JSONObject obj, HttpServletRequest request)throws Exception {
+                                 @RequestBody JSONObject obj, HttpServletRequest request) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int update = configResourceManager.update(apiName, obj, request);
-        if(update > 0) {
+        if (update > 0) {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
-        } else if(update == -1) {
+        } else if (update == -1) {
             return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
         } else {
             return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
@@ -106,12 +106,12 @@ public class ResourceController {
     @DeleteMapping(value = "/{apiName}/delete", produces = {"application/javascript", "application/json"})
     @ApiOperation(value = "删除")
     public String deleteResource(@PathVariable("apiName") String apiName,
-                                 @RequestParam("id") Long id, HttpServletRequest request)throws Exception {
+                                 @RequestParam("id") Long id, HttpServletRequest request) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int delete = configResourceManager.delete(apiName, id, request);
-        if(delete > 0) {
+        if (delete > 0) {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
-        } else if(delete == -1) {
+        } else if (delete == -1) {
             return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
         } else {
             return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
@@ -121,12 +121,12 @@ public class ResourceController {
     @DeleteMapping(value = "/{apiName}/deleteBatch", produces = {"application/javascript", "application/json"})
     @ApiOperation(value = "批量删除")
     public String batchDeleteResource(@PathVariable("apiName") String apiName,
-                                      @RequestParam("ids") String ids, HttpServletRequest request)throws Exception {
+                                      @RequestParam("ids") String ids, HttpServletRequest request) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int delete = configResourceManager.deleteBatch(apiName, ids, request);
-        if(delete > 0) {
+        if (delete > 0) {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
-        } else if(delete == -1) {
+        } else if (delete == -1) {
             return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
         } else {
             return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
@@ -136,11 +136,11 @@ public class ResourceController {
     @GetMapping(value = "/{apiName}/checkIsNameExist")
     @ApiOperation(value = "检查名称是否存在")
     public String checkIsNameExist(@PathVariable("apiName") String apiName,
-                                   @RequestParam Long id, @RequestParam(value ="name", required = false) String name,
-                                   HttpServletRequest request)throws Exception {
+                                   @RequestParam Long id, @RequestParam(value = "name", required = false) String name,
+                                   HttpServletRequest request) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int exist = configResourceManager.checkIsNameExist(apiName, id, name);
-        if(exist > 0) {
+        if (exist > 0) {
             objectMap.put("status", true);
         } else {
             objectMap.put("status", false);

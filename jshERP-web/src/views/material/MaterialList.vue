@@ -136,7 +136,7 @@
             :scroll="scroll"
             :loading="loading"
             :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange, columnWidth:'2%'}"
-            @change="handleTableChange">
+            @change="handleTableChange" @resizeColumn="handleResizeColumn">
             <span slot="action" slot-scope="text, record">
               <a @click="handleEdit(record)">编辑</a>
               <a-divider v-if="btnEnableList.indexOf(1)>-1" type="vertical" />
@@ -222,9 +222,9 @@
         // 默认的列
         defColumns: [
           {title: '条码', dataIndex: 'mBarCode'},
-          {title: '名称', dataIndex: 'name'},
+          {title: '名称', dataIndex: 'name',resizable: true,},
           {title: '规格', dataIndex: 'standard'},
-          {title: '型号', dataIndex: 'model'},
+          {title: '型号', dataIndex: 'model',resizable: true,},
           {title: '颜色', dataIndex: 'color'},
           {title: '类别', dataIndex: 'categoryName', width: 100, ellipsis:true},
           {title: '扩展信息', dataIndex: 'materialOther', width: 100, ellipsis:true},
@@ -379,6 +379,9 @@
           mpList: getMpListShort(Vue.ls.get('materialPropertyList'))  //扩展属性
         }
         this.loadData(1);
+      },
+      handleResizeColumn(w, col){
+        col.width = w;
       }
     }
   }

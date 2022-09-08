@@ -36,10 +36,10 @@ public class StringUtil {
         }
     }
 
-    public static boolean stringEquels(String source,String target) {
-        if(isEmpty(source)||isEmpty(target)){
+    public static boolean stringEquels(String source, String target) {
+        if (isEmpty(source) || isEmpty(target)) {
             return false;
-        }else{
+        } else {
             return source.equals(target);
         }
     }
@@ -181,7 +181,7 @@ public class StringUtil {
 
     public static BigDecimal getArrSum(String[] strings) {
         BigDecimal sum = BigDecimal.ZERO;
-        for(int i=0;i<strings.length;i++){
+        for (int i = 0; i < strings.length; i++) {
             sum = sum.add(new BigDecimal(strings[i]));
         }
         return sum;
@@ -195,10 +195,10 @@ public class StringUtil {
      * @return
      */
     public static List<Long> strToLongList(String strArr) {
-        List<Long> idList=new ArrayList<Long>();
-        String[] d=strArr.split(",");
+        List<Long> idList = new ArrayList<Long>();
+        String[] d = strArr.split(",");
         for (int i = 0, size = d.length; i < size; i++) {
-            if(d[i]!=null) {
+            if (d[i] != null) {
                 idList.add(Long.parseLong(d[i]));
             }
         }
@@ -213,10 +213,10 @@ public class StringUtil {
      * @return
      */
     public static List<BigDecimal> strToBigDecimalList(String strArr) {
-        List<BigDecimal> idList=new ArrayList<>();
-        String[] d=strArr.split(",");
+        List<BigDecimal> idList = new ArrayList<>();
+        String[] d = strArr.split(",");
         for (int i = 0, size = d.length; i < size; i++) {
-            if(d[i]!=null) {
+            if (d[i] != null) {
                 idList.add(new BigDecimal(d[i]));
             }
         }
@@ -231,13 +231,13 @@ public class StringUtil {
      * @return
      */
     public static List<String> strToStringList(String strArr) {
-        if(StringUtils.isEmpty(strArr)){
+        if (StringUtils.isEmpty(strArr)) {
             return null;
         }
-        List<String> idList=new ArrayList<String>();
-        String[] d=strArr.split(",");
+        List<String> idList = new ArrayList<String>();
+        String[] d = strArr.split(",");
         for (int i = 0, size = d.length; i < size; i++) {
-            if(d[i]!=null) {
+            if (d[i] != null) {
                 idList.add(d[i].toString());
             }
         }
@@ -247,18 +247,18 @@ public class StringUtil {
     public static List<String> searchCondition(String search) {
         if (isEmpty(search)) {
             return new ArrayList<String>();
-        }else{
+        } else {
             //String[] split = search.split(" ");
-			String[] split = search.split("#");
+            String[] split = search.split("#");
             return stringToListArray(split);
         }
     }
 
-    public static String getInfo(String search, String key){
+    public static String getInfo(String search, String key) {
         String value = null;
-        if(StringUtil.isNotEmpty(search)) {
-            search = search.replace("{}","");
-            if(StringUtil.isNotEmpty(search)) {
+        if (StringUtil.isNotEmpty(search)) {
+            search = search.replace("{}", "");
+            if (StringUtil.isNotEmpty(search)) {
                 JSONObject obj = JSONObject.parseObject(search);
                 if (obj.get(key) != null) {
                     value = obj.getString(key).trim();
@@ -274,7 +274,7 @@ public class StringUtil {
     }
 
     public static String toNull(String value) {
-        if(isEmpty(value)) {
+        if (isEmpty(value)) {
             value = null;
         } else {
             value = value.trim();
@@ -283,9 +283,9 @@ public class StringUtil {
     }
 
     public static boolean isExist(Object value) {
-        if(value!=null) {
+        if (value != null) {
             String str = value.toString();
-            if("".equals(str.trim())) {
+            if ("".equals(str.trim())) {
                 return false;
             } else {
                 return true;
@@ -297,14 +297,15 @@ public class StringUtil {
 
     /**
      * 判断对象是否为正整数
+     *
      * @param value
      * @return
      */
     public static boolean isPositiveLong(Object value) {
-        if(value!=null) {
+        if (value != null) {
             String str = value.toString();
-            if(isNotEmpty(str)) {
-                if((str.matches("[0-9]+"))&&(Long.parseLong(str)>0)) {
+            if (isNotEmpty(str)) {
+                if ((str.matches("[0-9]+")) && (Long.parseLong(str) > 0)) {
                     return true;
                 } else {
                     return false;
@@ -319,33 +320,35 @@ public class StringUtil {
 
     /**
      * 判断对象是否为数字（含小数）
+     *
      * @param str
      * @return
      */
-    public static boolean isPositiveBigDecimal(String str){
+    public static boolean isPositiveBigDecimal(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
-        if(str.indexOf(".")>0){//判断是否有小数点
-            if(str.indexOf(".")==str.lastIndexOf(".") && str.split("\\.").length==2){ //判断是否只有一个小数点
-                return pattern.matcher(str.replace(".","")).matches();
-            }else {
+        if (str.indexOf(".") > 0) {//判断是否有小数点
+            if (str.indexOf(".") == str.lastIndexOf(".") && str.split("\\.").length == 2) { //判断是否只有一个小数点
+                return pattern.matcher(str.replace(".", "")).matches();
+            } else {
                 return false;
             }
-        }else {
+        } else {
             return pattern.matcher(str).matches();
         }
     }
 
     /**
      * sql注入过滤，保障sql的安全执行
+     *
      * @param originStr
      * @return
      */
-    public static String safeSqlParse(String originStr){
+    public static String safeSqlParse(String originStr) {
         return originStr.replaceAll("(?i)" + regex, "");
     }
 
     public static void main(String[] args) {
-        int i = 10/3;
+        int i = 10 / 3;
         System.out.println(i);
     }
 }

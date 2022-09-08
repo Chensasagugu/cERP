@@ -1,12 +1,22 @@
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.jsh.erp.ErpApplication;
+import com.jsh.erp.domin.service.LoadDustoService;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.annotation.Resource;
+import java.io.File;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {ErpApplication.class})
 public class Test {
+    @Resource
+    LoadDustoService loadDustoService;
 
-    public static void main(String args[]){
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = formatter.format(date);
-        System.out.println(dateString);
+
+    @org.junit.Test
+    public void test(){
+        File excel = new File("/Users/chen/Documents/9-6.xls");
+        loadDustoService.enterOrder(excel);
     }
 }
