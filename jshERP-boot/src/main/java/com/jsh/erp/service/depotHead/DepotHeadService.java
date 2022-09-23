@@ -1,23 +1,30 @@
 package com.jsh.erp.service.depotHead;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.jsh.erp.common.constant.SupplierNameEnum;
+import com.jsh.erp.common.constant.SupplierType;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
 import com.jsh.erp.datasource.mappers.DepotHeadMapper;
 import com.jsh.erp.datasource.mappers.DepotHeadMapperEx;
 import com.jsh.erp.datasource.mappers.DepotItemMapperEx;
-import com.jsh.erp.datasource.vo.DepotHeadVo4InDetail;
-import com.jsh.erp.datasource.vo.DepotHeadVo4InOutMCount;
-import com.jsh.erp.datasource.vo.DepotHeadVo4List;
-import com.jsh.erp.datasource.vo.DepotHeadVo4StatementAccount;
+import com.jsh.erp.datasource.vo.*;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
+import com.jsh.erp.factory.DepotConvert;
 import com.jsh.erp.service.account.AccountService;
 import com.jsh.erp.service.accountItem.AccountItemService;
 import com.jsh.erp.service.depot.DepotService;
 import com.jsh.erp.service.depotItem.DepotItemService;
 import com.jsh.erp.service.log.LogService;
+import com.jsh.erp.service.material.MaterialService;
+import com.jsh.erp.service.materialExtend.MaterialExtendService;
 import com.jsh.erp.service.orgaUserRel.OrgaUserRelService;
 import com.jsh.erp.service.person.PersonService;
 import com.jsh.erp.service.redis.RedisService;
@@ -31,7 +38,9 @@ import com.jsh.erp.utils.Tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -46,7 +55,7 @@ import static com.jsh.erp.utils.Tools.getCenternTime;
 import static com.jsh.erp.utils.Tools.getNow3;
 
 @Service
-public class DepotHeadService {
+public class DepotHeadService extends ServiceImpl<DepotHeadMapper,DepotHead> {
     private Logger logger = LoggerFactory.getLogger(DepotHeadService.class);
 
     @Resource
@@ -81,6 +90,12 @@ public class DepotHeadService {
     private LogService logService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private DepotConvert depotConvert;
+    @Resource
+    private MaterialService materialService;
+    @Resource
+    private MaterialExtendService materialExtendService;
 
     public DepotHead getDepotHead(long id) throws Exception {
         DepotHead result = null;
@@ -1038,5 +1053,123 @@ public class DepotHeadService {
             JshException.readFail(logger, e);
         }
         return resList;
+    }
+
+
+    /**
+     * 将订单存入数据库,涉及4个表的变化：
+     * 1. jsh_depot_head 单据头
+     * 2. jsh_depot_item    单据内容
+     * 3. jsh_material  如果订单中有不存在的产品，则自动创建产品
+     * 4. jsh_material_extend
+     */
+    @Transactional
+    public void saveOrder(List<DepotInfoVo> depotInfoVos) {
+        if(CollectionUtils.isEmpty(depotInfoVos)){
+            throw new BusinessRunTimeException(ExceptionConstants.DEPOT_HEAD_EMPTY_ORDER_CODE,
+                    ExceptionConstants.DEPOT_HEAD_EMPTY_ORDER_MSG);
+        }
+        List<DepotItem> depotItems = new ArrayList<>();
+        for(DepotInfoVo info:depotInfoVos){
+            //保存单据头
+            DepotHead depotHead = depotConvert.convertHeadToPo(info);
+            LambdaQueryWrapper<Supplier> supplierWrapper = Wrappers.lambdaQuery();
+            if(Objects.nonNull(info.getOrgan())){
+                supplierWrapper.eq(Supplier::getSupplier,info.getOrgan());
+            }
+            Supplier one = supplierService.getOne(supplierWrapper);
+            if(Objects.nonNull(one)){
+                depotHead.setOrganId(one.getId());
+            }else{
+                //如果没有这个客户，则创建客户
+                Supplier supplier = createNewSupplier(info);
+                supplierService.save(supplier);
+                depotHead.setOrganId(supplier.getId());
+            }
+            this.save(depotHead);
+            List<DepotItemVo> depotItemVos = info.getItems();
+            for(DepotItemVo itemVo:depotItemVos){
+                //先要查询产品id存不存在
+                LambdaQueryWrapper<Material> materialWrapper = Wrappers.lambdaQuery();
+                if(Objects.nonNull(itemVo.getMaterialName())){
+                    materialWrapper.eq(Material::getName,itemVo.getMaterialName());
+                }
+                if(Objects.nonNull(itemVo.getMaterialModel())){
+                    materialWrapper.eq(Material::getModel,itemVo.getMaterialModel());
+                }
+                Material itemMaterial = materialService.getOne(materialWrapper);
+                MaterialExtend itemMaterialExtend;
+                //如果没有产品则在数据库中创建
+                if(Objects.isNull(itemMaterial)){
+                    Material material = createNewMaterial(itemVo);
+                    materialService.save(material);
+                    itemMaterial = material;
+                    //创建产品sku
+                    itemMaterialExtend = createNewMaterialExtend(itemMaterial,itemVo);
+                    materialExtendService.save(itemMaterialExtend);
+                }else{
+                    LambdaQueryWrapper<MaterialExtend> wrapper = Wrappers.lambdaQuery();
+                    if(Objects.nonNull(itemMaterial.getId())){
+                        wrapper.eq(MaterialExtend::getMaterialId,itemMaterial.getId());
+                    }
+                    if(Objects.nonNull(itemVo.getStandards())){
+                        wrapper.eq(MaterialExtend::getSku,itemVo.getStandards());
+                    }
+                    itemMaterialExtend = materialExtendService.getOne(wrapper);
+                    if(Objects.isNull(itemMaterialExtend)){
+                        itemMaterialExtend = createNewMaterialExtend(itemMaterial,itemVo);
+                        materialExtendService.save(itemMaterialExtend);
+                    }
+                }
+                itemVo.setMaterialId(itemMaterial.getId());
+                itemVo.setMaterialExtendId(itemMaterialExtend.getId());
+                //保存这个单据项
+                DepotItem depotItem = depotConvert.convertItemToPo(itemVo);
+                depotItem.setHeaderId(depotHead.getId());
+                depotItems.add(depotItem);
+            }
+        }
+        depotItemService.saveBatch(depotItems);
+    }
+
+    /**
+     * 根据订单项创建新产品
+     * @param itemVo
+     * @return
+     */
+    private Material createNewMaterial(DepotItemVo itemVo){
+        Material material = new Material();
+        material.setName(itemVo.getMaterialName());
+        material.setModel(itemVo.getMaterialModel());
+        material.setUnit(BusinessConstants.MATERIAL_DATA_UNIT);
+        material.setMfrs(SupplierNameEnum.ZHENGXUAN.getValue());
+        material.setTenantId(itemVo.getTenantId());
+        return material;
+    }
+
+    /**
+     * 根据订单项创建新的产品sku
+     * @param material
+     * @param itemVo
+     * @return
+     */
+    private MaterialExtend createNewMaterialExtend(Material material,DepotItemVo itemVo){
+        MaterialExtend itemMaterialExtend = new MaterialExtend();
+        itemMaterialExtend.setBarCode(materialService.getMaxBarCode()+1);
+        itemMaterialExtend.setCommodityUnit(BusinessConstants.MATERIAL_DATA_UNIT);
+        itemMaterialExtend.setMaterialId(material.getId());
+        itemMaterialExtend.setSku(itemVo.getStandards());
+        itemMaterialExtend.setTenantId(itemVo.getTenantId());
+        return itemMaterialExtend;
+    }
+
+    private Supplier createNewSupplier(DepotInfoVo infoVo){
+        Supplier supplier = new Supplier();
+        supplier.setSupplier(infoVo.getOrgan());
+        supplier.setType(SupplierType.CUSTOMER.getValue());
+        supplier.setEnabled(true);
+        supplier.setAdvanceIn(BigDecimal.ZERO);
+        supplier.setTenantId(infoVo.getTenantId());
+        return supplier;
     }
 }

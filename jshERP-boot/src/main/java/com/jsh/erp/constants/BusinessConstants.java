@@ -179,6 +179,8 @@ public class BusinessConstants {
      * */
     public static final String LOG_DATA_UNIT = "条";
 
+    public static final String MATERIAL_DATA_UNIT = "双";
+
     /**
      * 删除类型
      * 1正常删除
@@ -206,4 +208,5 @@ public class BusinessConstants {
      * 订单备注
      */
     public static final String DUSTO_REMARK = "大东发来的订单";
+
 }

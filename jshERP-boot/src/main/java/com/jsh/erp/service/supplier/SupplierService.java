@@ -2,6 +2,7 @@ package com.jsh.erp.service.supplier;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
@@ -39,7 +40,7 @@ import java.util.*;
 import static com.jsh.erp.utils.Tools.getNow3;
 
 @Service
-public class SupplierService {
+public class SupplierService extends ServiceImpl<SupplierMapper,Supplier> {
     private Logger logger = LoggerFactory.getLogger(SupplierService.class);
 
     @Resource

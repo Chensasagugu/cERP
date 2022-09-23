@@ -1,5 +1,6 @@
 package com.jsh.erp.datasource.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jsh.erp.datasource.entities.DepotHead;
 
 import java.math.BigDecimal;

@@ -1,8 +1,16 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.math.BigDecimal;
 
+@TableName("jsh_material")
 public class Material {
+
+    @TableId
     private Long id;
 
     private Long categoryId;
@@ -43,6 +51,7 @@ public class Material {
 
     private Long tenantId;
 
+    @TableField(fill = FieldFill.INSERT)
     private String deleteFlag;
 
     public Long getId() {
