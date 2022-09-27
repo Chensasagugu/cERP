@@ -1,8 +1,14 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.math.BigDecimal;
 
+@TableName("jsh_supplier")
 public class Supplier {
+
+    @TableId
     private Long id;
 
     private String supplier;

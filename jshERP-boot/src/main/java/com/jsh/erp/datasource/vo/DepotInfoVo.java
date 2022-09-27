@@ -19,11 +19,11 @@ import java.util.List;
 @Data
 public class DepotInfoVo {
 
-
     /**
      * id
      */
     private Long id;
+
     /**
      * 类型
      */

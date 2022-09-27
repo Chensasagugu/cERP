@@ -3,10 +3,12 @@ package com.jsh.erp.service.material;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
 import com.jsh.erp.datasource.mappers.*;
+import com.jsh.erp.datasource.vo.IronDrillMatetialVo;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.depot.DepotService;
@@ -36,7 +38,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class MaterialService {
+public class MaterialService extends ServiceImpl<MaterialMapper,Material> {
     private Logger logger = LoggerFactory.getLogger(MaterialService.class);
 
     @Resource
@@ -140,6 +142,11 @@ public class MaterialService {
             JshException.readFail(logger, e);
         }
         return resList;
+    }
+
+    public List<IronDrillMatetialVo> selectIronDrill(String materialParam){
+
+        return null;
     }
 
     public Long countMaterial(String materialParam, String color, String weight, String expiryNum,

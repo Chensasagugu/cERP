@@ -1,11 +1,12 @@
 package com.jsh.erp.datasource.mappers;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jsh.erp.datasource.entities.MaterialExtend;
 import com.jsh.erp.datasource.entities.MaterialExtendExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface MaterialExtendMapper {
+public interface MaterialExtendMapper extends BaseMapper<MaterialExtend> {
     long countByExample(MaterialExtendExample example);
 
     int deleteByExample(MaterialExtendExample example);

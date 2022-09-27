@@ -1,9 +1,19 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@TableName("jsh_depot_item")
 public class DepotItem {
+    @TableId
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     private Long headerId;
@@ -50,6 +60,7 @@ public class DepotItem {
 
     private Long tenantId;
 
+    @TableField(fill = FieldFill.INSERT)
     private String deleteFlag;
 
     public Long getId() {

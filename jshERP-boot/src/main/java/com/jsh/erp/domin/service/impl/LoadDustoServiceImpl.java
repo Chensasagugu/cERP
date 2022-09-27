@@ -7,11 +7,13 @@ package com.jsh.erp.domin.service.impl;
 import com.jsh.erp.datasource.vo.DepotInfoVo;
 import com.jsh.erp.domin.service.LoadDustoService;
 import com.jsh.erp.factory.DepotConvert;
+import com.jsh.erp.service.depotHead.DepotHeadService;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -28,6 +30,10 @@ public class LoadDustoServiceImpl implements LoadDustoService {
 
     @Resource
     DepotConvert depotConvert;
+    @Resource
+    DepotHeadService depotHeadService;
+
+
 
     @Override
     public void enterOrder(File file) {
@@ -36,10 +42,8 @@ public class LoadDustoServiceImpl implements LoadDustoService {
             Workbook workbook = Workbook.getWorkbook(file);
             Sheet sheet = workbook.getSheet(0);
             List<DepotInfoVo> dustoOrderVos = depotConvert.convertToDepotInfo(sheet);
-            System.out.println(dustoOrderVos);
-            //Cell[] row = sheet.getRow(116);
-            //log.info(String.valueOf(row.length));
-            //log.info(row[DustoOrderEnum.COLUMN_MODEL.getIndex()].getContents());
+            //depotHeadService.saveOrder(dustoOrderVos);
+            depotHeadService.saveOrder(dustoOrderVos);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {

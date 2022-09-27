@@ -12,6 +12,10 @@
         <result column="low_decimal" jdbcType="VARCHAR" property="lowDecimal" />
         <result column="sku" jdbcType="VARCHAR" property="sku" />
     </resultMap>
+    
+    <resultMap extends="com.jsh.erp.datasource.mappers.MaterialMapper.BaseResultMap" id="IronDrillResult" type="com.jsh.erp.datasource.vo.IronDrillMatetialVo">
+
+    </resultMap>
 
     <resultMap extends="com.jsh.erp.datasource.mappers.MaterialMapper.BaseResultMap" id="ResultMapListWithStock" type="com.jsh.erp.datasource.entities.MaterialVo4Unit">
         <result column="unitName" jdbcType="VARCHAR" property="unitName" />
@@ -692,5 +696,8 @@
         <if test="id != null">
             and m.id != #{id}
         </if>
+    </select>
+    <select id="selectIronDrillMaterial" resultType="com.jsh.erp.datasource.vo.IronDrillMatetialVo">
+        
     </select>
 </mapper>

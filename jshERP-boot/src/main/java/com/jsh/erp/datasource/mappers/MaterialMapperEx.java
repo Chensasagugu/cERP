@@ -1,6 +1,7 @@
 package com.jsh.erp.datasource.mappers;
 
 import com.jsh.erp.datasource.entities.*;
+import com.jsh.erp.datasource.vo.IronDrillMatetialVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -144,4 +145,6 @@ public interface MaterialMapperEx {
             @Param("otherField3") String otherField3,
             @Param("unit") String unit,
             @Param("unitId") Long unitId);
+
+    List<IronDrillMatetialVo> selectIronDrillMaterial();
 }

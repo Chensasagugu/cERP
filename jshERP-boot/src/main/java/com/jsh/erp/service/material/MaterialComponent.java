@@ -30,6 +30,11 @@ public class MaterialComponent implements ICommonQuery {
     public List<?> select(Map<String, String> map)throws Exception {
         return getMaterialList(map);
     }
+    private List<?> getIronDrillMaterialList(Map<String, String> map) throws Exception{
+        String search = map.get(Constants.SEARCH);
+        String materialParam = StringUtil.getInfo(search, "materialParam");
+        return null;
+    }
 
     private List<?> getMaterialList(Map<String, String> map) throws Exception{
         String search = map.get(Constants.SEARCH);

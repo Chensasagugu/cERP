@@ -1,9 +1,21 @@
 package com.jsh.erp.datasource.entities;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@TableName("jsh_depot_head")
 public class DepotHead {
+    @TableId
+    @JSONField(serializeUsing = ToStringSerializer.class)
     private Long id;
 
     private String type;
@@ -14,8 +26,10 @@ public class DepotHead {
 
     private String number;
 
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date operTime;
 
     private Long organId;
@@ -62,6 +76,7 @@ public class DepotHead {
 
     private Long tenantId;
 
+    @TableField(fill = FieldFill.INSERT)
     private String deleteFlag;
 
     public Long getId() {

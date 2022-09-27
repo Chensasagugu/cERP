@@ -3,6 +3,7 @@ package com.jsh.erp.service.materialExtend;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.MaterialExtend;
@@ -33,7 +34,7 @@ import java.util.List;
 
 
 @Service
-public class MaterialExtendService {
+public class MaterialExtendService extends ServiceImpl<MaterialExtendMapper,MaterialExtend> {
     private Logger logger = LoggerFactory.getLogger(MaterialExtendService.class);
 
     @Resource

@@ -2,6 +2,7 @@ package com.jsh.erp.service.depotItem;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
@@ -32,7 +33,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @Service
-public class DepotItemService {
+public class DepotItemService extends ServiceImpl<DepotItemMapper,DepotItem> {
     private Logger logger = LoggerFactory.getLogger(DepotItemService.class);
 
     private final static String TYPE = "入库";

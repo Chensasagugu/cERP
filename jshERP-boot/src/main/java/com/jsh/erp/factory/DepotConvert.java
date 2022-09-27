@@ -6,16 +6,20 @@ package com.jsh.erp.factory;
 
 import com.jsh.erp.common.constant.DustoOrderEnum;
 import com.jsh.erp.constants.BusinessConstants;
+import com.jsh.erp.datasource.entities.DepotHead;
+import com.jsh.erp.datasource.entities.DepotItem;
 import com.jsh.erp.datasource.vo.DepotInfoVo;
 import com.jsh.erp.datasource.vo.DepotItemVo;
-import io.swagger.models.auth.In;
 import jxl.Cell;
 import jxl.Sheet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +30,11 @@ import java.util.List;
  * @author chenshuai
  * @date 2022/9/8 11:19
  */
-@Component
-public class DepotConvert {
+//@Component
+@Mapper(componentModel = "spring")
+public interface DepotConvert {
+
+
 
     /**
      * 将大东订单工作表变为单据Vo
@@ -35,7 +42,7 @@ public class DepotConvert {
      * @param sheet
      * @return
      */
-    public List<DepotInfoVo> convertToDepotInfo(Sheet sheet) {
+    default List<DepotInfoVo> convertToDepotInfo(Sheet sheet) {
         HashMap<String, DepotInfoVo> map = new HashMap<>();
         for (int i = 1; i < sheet.getRows(); i++) {
             Cell[] row = sheet.getRow(i);
@@ -52,6 +59,7 @@ public class DepotConvert {
             depotItem.setTotalNumber(Integer.valueOf(row[DustoOrderEnum.COLUMN_PLAN_NUMBER.getIndex()].getContents()));
             depotItem.setStandards(row[DustoOrderEnum.COLUMN_STANDARDS.getIndex()].getContents());
             //TODO 设置租户id
+            depotItem.setTenantId(63L);
 
             //创建或获得单据头
             DepotInfoVo depotInfo;
@@ -68,6 +76,7 @@ public class DepotConvert {
                 depotInfo.setRemark(BusinessConstants.DUSTO_REMARK);
                 depotInfo.setStatus(BusinessConstants.BILLS_STATUS_AUDIT);
                 //TODO 设置租户id
+                depotInfo.setTenantId(63L);
 
                 depotInfo.setItems(new ArrayList<>());
                 map.put(sequence, depotInfo);
@@ -89,7 +98,7 @@ public class DepotConvert {
      * 将订单中相同类型的产品数量合并
      * @param depotInfoVos
      */
-    private void combineDepotItem(List<DepotInfoVo> depotInfoVos) {
+    default void combineDepotItem(List<DepotInfoVo> depotInfoVos) {
         for (DepotInfoVo depotInfo:depotInfoVos) {
             HashMap<Material, DepotItemVo> map = new HashMap<>();
             for(DepotItemVo item: depotInfo.getItems()){
@@ -108,10 +117,31 @@ public class DepotConvert {
         }
     }
 
+    /**
+     * 单据头转化为po
+     *
+     * @param depotInfo
+     * @return
+     */
+    DepotHead convertHeadToPo(DepotInfoVo depotInfo);
+
+    List<DepotHead> convertHeadToPo(List<DepotInfoVo> depotInfoVos);
+
+    /**
+     * 单据项转化为po
+     */
+    @Mappings({
+            @Mapping(target = "operNumber",source = "remainNumber"),
+            @Mapping(target = "basicNumber",source = "totalNumber")
+    })
+    DepotItem convertItemToPo(DepotItemVo depotItemVo);
+
+    List<DepotItem> convertItemToPo(List<DepotItemVo> depotItemVos);
+
     @Data
     @EqualsAndHashCode
     @AllArgsConstructor
-    static class Material {
+    class Material {
         private String name;
         private String model;
         private String standards;

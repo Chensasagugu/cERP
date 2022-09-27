@@ -1,9 +1,15 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@TableName("jsh_material_extend")
 public class MaterialExtend {
+
+    @TableId
     private Long id;
 
     private Long materialId;

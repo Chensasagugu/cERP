@@ -2,6 +2,7 @@ package com.jsh.erp.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jsh.erp.common.base.Result;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.DepotHead;
@@ -11,6 +12,7 @@ import com.jsh.erp.datasource.vo.DepotHeadVo4InDetail;
 import com.jsh.erp.datasource.vo.DepotHeadVo4InOutMCount;
 import com.jsh.erp.datasource.vo.DepotHeadVo4List;
 import com.jsh.erp.datasource.vo.DepotHeadVo4StatementAccount;
+import com.jsh.erp.domin.service.LoadDustoService;
 import com.jsh.erp.exception.BusinessParamCheckingException;
 import com.jsh.erp.service.accountHead.AccountHeadService;
 import com.jsh.erp.service.depot.DepotService;
@@ -25,9 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DecimalFormat;
@@ -56,6 +61,21 @@ public class DepotHeadController {
 
     @Resource
     private RedisService redisService;
+
+    @Resource
+    LoadDustoService loadDustoService;
+
+    /**
+     * 导入大东订单
+     */
+    @PostMapping(value = "/importDustoOrder")
+    @ApiOperation(value = "批量导入大东订单")
+    public Result<Void> importDustoOrder(MultipartFile uploadFile) throws IOException {
+        File file = new File("");
+        uploadFile.transferTo(file);
+        loadDustoService.enterOrder(file);
+        return Result.frontOk(null);
+    }
 
     /**
      * 批量设置状态-审核或者反审核

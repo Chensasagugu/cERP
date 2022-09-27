@@ -1,11 +1,12 @@
 package com.jsh.erp.datasource.mappers;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jsh.erp.datasource.entities.DepotHead;
 import com.jsh.erp.datasource.entities.DepotHeadExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
-public interface DepotHeadMapper {
+public interface DepotHeadMapper extends BaseMapper<DepotHead> {
     long countByExample(DepotHeadExample example);
 
     int deleteByExample(DepotHeadExample example);

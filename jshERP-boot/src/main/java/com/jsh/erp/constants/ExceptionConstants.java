@@ -385,6 +385,9 @@ public class ExceptionConstants {
     //单据录入-商品条码XXX的单价低于最低售价
     public static final int DEPOT_HEAD_UNIT_PRICE_LOW_CODE = 8000018;
     public static final String DEPOT_HEAD_UNIT_PRICE_LOW_MSG = "商品条码%s的单价低于最低售价";
+    //单据录入-读取大东订单的时候大东订单列表为空列表
+    public static final int DEPOT_HEAD_EMPTY_ORDER_CODE = 8000019;
+    public static final String DEPOT_HEAD_EMPTY_ORDER_MSG = "没有订单";
     /**
      *  单据明细信息
      * type = 90

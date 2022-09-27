@@ -42,12 +42,12 @@ public class DepotItemVo {
     private String materialName;
 
     /**
-     * 产品货号
+     * 参考货号
      */
     private String materialModel;
 
     /**
-     * 规格
+     * 规格描述（34/35/...）
      */
     private String standards;
     /**
