@@ -225,7 +225,7 @@
           {title: '名称', dataIndex: 'name',resizable: true,},
           {title: '规格', dataIndex: 'standard'},
           {title: '型号', dataIndex: 'model',resizable: true,},
-          {title: '颜色', dataIndex: 'color'},
+          {title: '颜色', dataIndex: 'sku'},
           {title: '类别', dataIndex: 'categoryName', width: 100, ellipsis:true},
           {title: '扩展信息', dataIndex: 'materialOther', width: 100, ellipsis:true},
           {title: '单位', dataIndex: 'unit', width: 100, ellipsis:true,

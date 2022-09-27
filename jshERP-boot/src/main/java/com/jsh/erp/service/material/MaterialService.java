@@ -8,6 +8,7 @@ import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
 import com.jsh.erp.datasource.mappers.*;
+import com.jsh.erp.datasource.vo.IronDrillMatetialVo;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.depot.DepotService;
@@ -141,6 +142,11 @@ public class MaterialService extends ServiceImpl<MaterialMapper,Material> {
             JshException.readFail(logger, e);
         }
         return resList;
+    }
+
+    public List<IronDrillMatetialVo> selectIronDrill(String materialParam){
+
+        return null;
     }
 
     public Long countMaterial(String materialParam, String color, String weight, String expiryNum,
