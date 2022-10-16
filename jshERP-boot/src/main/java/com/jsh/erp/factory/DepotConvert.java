@@ -10,6 +10,8 @@ import com.jsh.erp.datasource.entities.DepotHead;
 import com.jsh.erp.datasource.entities.DepotItem;
 import com.jsh.erp.datasource.vo.DepotInfoVo;
 import com.jsh.erp.datasource.vo.DepotItemVo;
+import com.jsh.erp.datasource.vo.OutBoundMaterialVo;
+import com.tencentcloudapi.ocr.v20181119.models.TableDetectInfo;
 import jxl.Cell;
 import jxl.Sheet;
 import lombok.AllArgsConstructor;
@@ -33,7 +35,6 @@ import java.util.List;
 //@Component
 @Mapper(componentModel = "spring")
 public interface DepotConvert {
-
 
 
     /**
@@ -137,6 +138,7 @@ public interface DepotConvert {
     DepotItem convertItemToPo(DepotItemVo depotItemVo);
 
     List<DepotItem> convertItemToPo(List<DepotItemVo> depotItemVos);
+
 
     @Data
     @EqualsAndHashCode

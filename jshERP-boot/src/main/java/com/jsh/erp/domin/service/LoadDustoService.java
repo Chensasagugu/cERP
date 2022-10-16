@@ -21,4 +21,12 @@ public interface LoadDustoService {
      * @param file
      */
     void enterOrder(File file);
+
+    /**
+     * 输入大东送货图片，生成对应出库单
+     * @param image
+     */
+    void generateOutboundOrder(File image);
+
+
 }
