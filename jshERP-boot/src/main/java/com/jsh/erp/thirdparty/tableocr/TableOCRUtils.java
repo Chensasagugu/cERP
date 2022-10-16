@@ -23,8 +23,8 @@ import java.io.File;
  * @date 2022/9/29 17:13
  */
 public class TableOCRUtils {
-    private static String SECRET_ID = "AKIDPgpnaDJPOJ5e3HbSDpFbo2EEzY3QZbRA";
-    private static String SECRET_KEY = "nsoaCcqpU9csujLk4KPNEtMcgmfLyRgi";
+    private static String SECRET_ID = "xx";
+    private static String SECRET_KEY = "xx";
 
     /**
      * 输入图片，输出腾讯云ocr解析的表格对象
