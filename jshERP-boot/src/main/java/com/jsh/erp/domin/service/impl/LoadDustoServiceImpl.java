@@ -6,6 +6,7 @@ package com.jsh.erp.domin.service.impl;
 
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.datasource.vo.DepotInfoVo;
+import com.jsh.erp.datasource.vo.DepotItemVo;
 import com.jsh.erp.datasource.vo.OutBoundDepotVo;
 import com.jsh.erp.datasource.vo.OutBoundMaterialVo;
 import com.jsh.erp.domin.service.LoadDustoService;
@@ -24,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,14 +62,14 @@ public class LoadDustoServiceImpl implements LoadDustoService {
     }
 
     @Override
-    public void generateOutboundOrder(File image) {
-        TableDetectInfo tableDetections = TableOCRUtils.testTableOCR().getTableDetections()[0];
+    public void generateOutboundOrder(String imageUrl) {
+        TableDetectInfo tableDetections = TableOCRUtils.tableOCR(imageUrl).getTableDetections()[0];
         List<OutBoundMaterialVo> outBoundMaterialVos = materialConvert.convertTableDetectionInfoToMaterialVo(tableDetections);
         List<List<OutBoundMaterialVo>> classification = classification(outBoundMaterialVos);
         //创建出库单
-        for(List<OutBoundMaterialVo> outBoundItems:classification){
+        //for(List<OutBoundMaterialVo> outBoundItems:classification){
 
-        }
+        //}
     }
 
     /**
@@ -81,10 +79,14 @@ public class LoadDustoServiceImpl implements LoadDustoService {
      */
     private OutBoundDepotVo createOutBoundDepotVo(List<OutBoundMaterialVo> outBoundItems){
         OutBoundDepotVo outBoundDepotVo = new OutBoundDepotVo();
-        List<String> numbers = new ArrayList<>();
-        List<String> models = new ArrayList<>();
+        Set<String> numbers = new HashSet<>();
+        Set<String> models = new HashSet<>();
+        List<DepotItemVo> depotItemVos = new ArrayList<>();
         outBoundDepotVo.setType(BusinessConstants.DEPOTHEAD_TYPE_OUT);
         outBoundDepotVo.setSubType(BusinessConstants.SUB_TYPE_SALES);
+        for(OutBoundMaterialVo materialVo:outBoundItems){
+
+        }
         return null;
 
     }

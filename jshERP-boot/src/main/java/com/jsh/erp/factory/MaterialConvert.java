@@ -29,12 +29,18 @@ public interface MaterialConvert {
         OutBoundTable table = new OutBoundTable();
         String nowMaterial = "";
         String nowTime = "";
+        boolean hasTimeIndex = false;
         for (int i=0;i<cells.length;i++){
             String text = cells[i].getText();
+            if(text.contains("送货有问题")||StringUtils.isEmpty(text)){
+                continue;
+            }
             if(text.contains("型")){
                 table.setMaterialColIndex(cells[i].getColTl());
-            }else if(text.contains("日")){
+            }else if(text.contains("送货")&&!hasTimeIndex){
+                //送货时间
                 table.setTimeColIndex(cells[i].getColTl());
+                hasTimeIndex = true;
             }else if(text.contains("34#")){
                 table.setSku34Index(cells[i].getColTl());
             }else if(text.contains("35#")){

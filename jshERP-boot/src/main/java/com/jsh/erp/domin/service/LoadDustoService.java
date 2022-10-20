@@ -24,9 +24,9 @@ public interface LoadDustoService {
 
     /**
      * 输入大东送货图片，生成对应出库单
-     * @param image
+     * @param imageUrl
      */
-    void generateOutboundOrder(File image);
+    void generateOutboundOrder(String imageUrl);
 
 
 }
